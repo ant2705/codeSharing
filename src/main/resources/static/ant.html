@@ -16,6 +16,7 @@
 			margin-right: 5%;
 		}
     </style>
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
 	<div id="controlpanel">
@@ -41,6 +42,7 @@
 				<!-- 添加其他支持的语言选项 -->
 			</select>
 			<button id="toggleButton">切换主题</button>
+			<button id="upload">上传</button>
 		</div>
     </div>
 	<div id="container"></div>
@@ -49,8 +51,10 @@
     <script>
         require.config({ paths: { 'vs': 'mylib/min/vs' }});
 
+		var editor;
+
         require(['vs/editor/editor.main'], function() {
-            var editor = monaco.editor.create(document.getElementById('container'), {
+            editor = monaco.editor.create(document.getElementById('container'), {
                 value: "Hello, Monaco!",
                 language: null,
 				theme: "vs-dark",
@@ -80,5 +84,29 @@
             });
         });
     </script>
+
+
+	<script>
+		// 获取按钮元素
+		var myButton = document.getElementById('upload');
+		// 添加点击事件监听器
+		myButton.addEventListener('click', function () {
+			// console.log(editor.getValue());
+			// 使用 Axios 发起 GET 请求
+			axios.get('/sharecode', {
+				params:{
+					text: editor.getValue()
+				}
+			})
+					.then(function (response) {
+						// 处理响应数据
+						console.log(response.data);
+					})
+					.catch(function (error) {
+						// 处理错误
+						console.error(error);
+					});
+		});
+	</script>
 </body>
 </html>
