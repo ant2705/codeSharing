@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        #container {
+            width: 90%;
+            height: 93%;
+			 bottom: 0;
+			 position: absolute;
+			 margin-left: 5%;
+			 margin-right: 5%;
+        }
+		#controlpanel {
+			margin-left: 5%;
+			margin-right: 5%;
+		}
+    </style>
+</head>
+<body>
+	<div id="controlpanel">
+		<div>
+			<label>Ant's Online Code Editor</label>
+			<select id="languageSelector">
+				<option value="plaintext">纯文本</option>
+				<option value="javascript">JavaScript</option>
+				<option value="typescript">TypeScript</option>
+				<option value="python">Python</option>
+				<option value="java">Java</option>
+				<option value="cpp">C++</option>
+				<option value="csharp">C#</option>
+				<option value="go">Go</option>
+				<option value="ruby">Ruby</option>
+				<option value="rust">Rust</option>
+				<option value="swift">Swift</option>
+				<option value="html">HTML</option>
+				<option value="css">CSS</option>
+				<option value="xml">XML</option>
+				<option value="json">JSON</option>
+				<option value="markdown">Markdown</option>
+				<!-- 添加其他支持的语言选项 -->
+			</select>
+			<button id="toggleButton">切换主题</button>
+		</div>
+    </div>
+	<div id="container"></div>
+
+    <script src="mylib/min/vs/loader.js"></script>
+    <script>
+        require.config({ paths: { 'vs': 'mylib/min/vs' }});
+
+        require(['vs/editor/editor.main'], function() {
+            var editor = monaco.editor.create(document.getElementById('container'), {
+                value: "Hello, Monaco!",
+                language: null,
+				theme: "vs-dark",
+				fontSize: "18px"
+            });
+			
+			var isDark = 1;
+			
+			var languageSelector = document.getElementById('languageSelector');
+            languageSelector.addEventListener('change', function() {
+                var selectedLanguage = languageSelector.value;
+                monaco.editor.setModelLanguage(editor.getModel(), selectedLanguage);
+            });
+			
+			var toggleButton = document.getElementById('toggleButton');
+            toggleButton.addEventListener('click', function() {
+                // var currentTheme = monaco.editor.getTheme();
+                // var newTheme = currentTheme === 'vs-dark' ? 'vs-light' : 'vs-dark';
+                if(isDark == 1){
+					monaco.editor.setTheme("vs");
+					isDark = 0;
+				}
+				else{
+					monaco.editor.setTheme("vs-dark");
+					isDark = 1;
+				}
+            });
+        });
+    </script>
+</body>
+</html>
