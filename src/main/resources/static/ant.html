@@ -43,6 +43,8 @@
 			</select>
 			<button id="toggleButton">切换主题</button>
 			<button id="upload">上传</button>
+			<input type="text" id="codekey" value="helloworld">
+			<button onclick="pullCode()">获取</button>
 		</div>
     </div>
 	<div id="container"></div>
@@ -101,12 +103,35 @@
 					.then(function (response) {
 						// 处理响应数据
 						console.log(response.data);
+						if(response.data != "Failed"){
+							alert("Your key is " + response.data);
+						}
 					})
 					.catch(function (error) {
 						// 处理错误
 						console.error(error);
 					});
 		});
+		function pullCode() {
+			var textBox = document.getElementById("codekey");
+			var textValue = textBox.value;
+			console.log(textValue);
+
+			axios.get('/pull', {
+				params:{
+					codekey: textValue
+				}
+			})
+					.then(function (response) {
+						// 处理响应数据
+						console.log(response.data);
+						editor.setValue(response.data);
+					})
+					.catch(function (error) {
+						// 处理错误
+						console.error(error);
+					});
+		}
 	</script>
 </body>
 </html>
